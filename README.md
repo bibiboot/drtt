@@ -5,7 +5,9 @@ Estimated Round trip delay of a direct link
 
 Undertanding directories
 ------------------------
-- src/lib  : Contains library specific codes written by the contributor.
+1. src/li
+  1. Contains library specific codes written by the contributor.
+
 - src/deps : Contains the external libraries which are dependency.
 - etc      : Contains the data or setting text files used.
 - scripts  : Contains shell scripts.
