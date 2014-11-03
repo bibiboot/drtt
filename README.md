@@ -106,7 +106,6 @@ Protocol
 | Custom Header  | 64 Bit |
 | ------------- | -------------- |
 | Sender Timestamp | 16 bit |
-| ------------- | -------------- |
 
 | Custom Header | Send Timestamp |
 | ------------- | -------------- |
