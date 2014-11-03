@@ -73,3 +73,16 @@ variable that is used to hold a temporary value.
   generally easily keep track of about 7 different things, anything more
   and it gets confused.  You know you're brilliant, but maybe you'd like
   to understand what you did 2 weeks from now.
+
+Framework usuage guidelines
+---------------------------
+- Access global variable.
+```
+    struct globals {
+        int new_variable;
+        ...
+    }
+
+    globals.new_variable = 10;
+```
+- Access config variable.
