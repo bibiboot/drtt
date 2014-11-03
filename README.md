@@ -73,6 +73,17 @@ variable that is used to hold a temporary value.
   generally easily keep track of about 7 different things, anything more
   and it gets confused.  You know you're brilliant, but maybe you'd like
   to understand what you did 2 weeks from now.
+- Always comment before the function starts in the below mentioned style.
+```
+    /*
+     * This is the preferred style for multi-line
+     * comments in the Linux kernel source code.
+     * Please use it consistently.
+     *
+     * Description:  A column of asterisks on the left side,
+     * with beginning and ending almost-blank lines.
+     */
+```
 
 Framework usuage guidelines
 ---------------------------
@@ -86,3 +97,10 @@ Framework usuage guidelines
     globals.new_variable = 10;
 ```
 - Access config variable.
+```
+    struct config {
+        int packet_len;
+    }
+
+    int i = globals.config.packet_len;
+```
