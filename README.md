@@ -17,7 +17,7 @@ Most important Coding guidlines
 - Follow 4 space indentation.
 - Follow one line space between all the fucntions.
 - Conditional statements must be
-
+```
     if (x == y) {
         ..
     } else if (x > y) {
@@ -25,6 +25,7 @@ Most important Coding guidlines
     } else {
         ....
     }
+```
 
 
 
