@@ -84,6 +84,10 @@ variable that is used to hold a temporary value.
      * with beginning and ending almost-blank lines.
      */
 ```
+- Generally, you want your comments to tell WHAT your code does, not
+  HOW.
+- Linux style for comments is the C89 "/* ... */" style.
+Don't use C99-style "// ..." comments.
 
 Framework usuage guidelines
 ---------------------------
