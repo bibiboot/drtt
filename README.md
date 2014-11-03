@@ -74,6 +74,10 @@ that counts the number of active users, you should call that
 
 Framework usage guidelines
 ---------------------------
+- Always include the following header when you create any new file.
+```
+    #include "globals.h"
+```
 - Access global variable.
 ```
     struct globals {
