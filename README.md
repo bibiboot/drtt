@@ -44,3 +44,5 @@ some random integer loop counter, it should probably be called "i".
 Calling it "loop_counter" is non-productive, if there is no chance of it
 being mis-understood.  Similarly, "tmp" can be just about any type of
 variable that is used to hold a temporary value.
+- Try to use  u8/u16/u32 , instead of long long int etc.
+
