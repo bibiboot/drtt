@@ -72,7 +72,7 @@ Don't use C99-style "// ..." comments.
 that counts the number of active users, you should call that
 "count_active_users()" or similar, you should _not_ call it "cntusr()"
 
-Framework usuage guidelines
+Framework usage guidelines
 ---------------------------
 - Access global variable.
 ```
@@ -91,3 +91,19 @@ Framework usuage guidelines
 
     int i = globals.config.packet_len;
 ```
+
+Repo functionality
+------------------
+- Make echo request to all the direct linked nodes running drtt.
+- Recieve the echo reply of all the request send.
+- Calculate the RTT of a given directly connected node.
+- Node can be router or host.
+- Store the RTT in a persistent store.
+- Create a functionality of IPC with the CNTP or CROUTER.
+
+Protocol
+--------
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
