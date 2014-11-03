@@ -16,7 +16,7 @@ Most important Coding guidlines
 -------------------------------
 - Follow 4 space indentation.
 - Follow one line space between all the fucntions.
-- Conditional statements must be
+- Conditional statements must be in the below format.
 ```
     if (x == y) {
         ..
@@ -26,6 +26,10 @@ Most important Coding guidlines
         ....
     }
 ```
-
-
-
+- Functions much be written in the below format.
+```
+    int main (int argc, char *argv[])
+    {
+      ..
+    }
+```
