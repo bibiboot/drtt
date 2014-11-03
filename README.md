@@ -92,6 +92,15 @@ Framework usage guidelines
     int i = globals.config.packet_len;
 ```
 
+Print in color
+--------------
+- Do not include anything. As color.h is already included in the
+  global.h
+```
+    printf(KRED "This text is going to be red in color" RESET);
+```
+
+
 Repo functionality
 ------------------
 - Make echo request to all the direct linked nodes running drtt.
