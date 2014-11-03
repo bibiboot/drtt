@@ -36,5 +36,6 @@ Most important Coding guidlines
 - Use one space around (on each side of) most binary and ternary
   operators,
   such as any of these:
-
+```
     =  +  -  <  >  *  /  %  |  &  ^  <=  >=  ==  !=  ?  :
+```
