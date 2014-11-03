@@ -103,10 +103,8 @@ Repo functionality
 
 Protocol
 --------
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
+| Custom Header  | 64 Bit |
+| Sender Timestamp | 16 bit |
 
 | Custom Header | Send Timestamp |
 | ------------- | -------------- |
