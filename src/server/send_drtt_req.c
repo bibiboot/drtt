@@ -11,7 +11,7 @@ send_drtt_req()
     memset(pkt, 0, DRTT_SZ);
     
     s = create_sending_socket();
-    set_socket_inf(s, "lo", &sk); //[AB]move "lo" to config
+    set_socket_inf(s, SENDER_INF, &sk); //[AB]move "lo" to config
     
     populate_header(STRATUM0, STRATUM0, STRATUM1, DRTT_REQ_PORT, &pkt);
     create_timestamp(pkt + CUSTOM_HEADER_SZ);

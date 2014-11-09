@@ -8,3 +8,5 @@ struct config {
     uint16_t rtt;
     uint16_t packet_len;
 };
+
+#define SENDER_INF "lo"
