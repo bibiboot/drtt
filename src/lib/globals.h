@@ -29,7 +29,7 @@ struct globals {
     struct config config;
     dict_node *hashl;
 };
-struct custom_packet_hdr{                                                       
+struct custom_packet_header{                                                       
     uint16_t next_hop_addr;                                                     
     uint16_t dst_addr;                                                          
     uint16_t src_addr;                                                          
@@ -37,7 +37,9 @@ struct custom_packet_hdr{
 };                                                                              
 extern struct globals globals;
 
-#define CUSTOM_HEADER_SZ sizeof(struct custom_packet_hdr)                       
+#define CUSTOM_HEADER_SZ sizeof(struct custom_packet_header)                       
 #define TIMESTAMP_SZ sizeof(uint64_t)                                           
 #define DRTT_SZ (CUSTOM_HEADER_SZ + TIMESTAMP_SZ)
-
+#define STRATUM0 1
+#define STRATUM1 2
+#define DRTT_REQ_PORT 1
