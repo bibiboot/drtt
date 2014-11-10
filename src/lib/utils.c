@@ -51,4 +51,8 @@ print_drtt_packet_net(void *packet)
     print_ts_net(packet + CUSTOM_HEADER_SZ);
 }
 
-
+void 
+print_timestamp(struct timestamp* ts)
+{
+    printf("sec:%u\tfsec:%u\n", ts->sec, ts->fsec);
+}

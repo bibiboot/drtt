@@ -10,15 +10,16 @@ send_drtt_req()
     pkt = malloc(DRTT_SZ);
     memset(pkt, 0, DRTT_SZ);
     
-    s = create_sending_socket();
-    set_socket_inf(s, SENDER_INF, &sk); //[AB]move "lo" to config
+    s = create_sending_socket(SENDER_INF, &sk);
+    //set_socket_inf(s, SENDER_INF, &sk); //[AB]move "lo" to config
     
-    populate_header(STRATUM0, STRATUM0, STRATUM1, DRTT_REQ_PORT, &pkt);
-    create_timestamp(pkt + CUSTOM_HEADER_SZ);
-    
-    print_drtt_packet(pkt);
-    print_drtt_packet_net(pkt);
+    populate_header(BROADCAST_ADDR, BROADCAST_ADDR, STRATUM0, DRTT_REQ_PORT, &pkt);
+    create_timestamp((struct timestamp*)(pkt + CUSTOM_HEADER_SZ));
     
     send_packet(s, &sk, (void *)pkt, DRTT_SZ);
+   
+    print_drtt_packet(pkt);
+    print_drtt_packet_net(pkt);
+    print_timestamp((struct timestamp*)(pkt + CUSTOM_HEADER_SZ));
 
 }

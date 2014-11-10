@@ -10,4 +10,4 @@ struct config {
 };
 
 #define SENDER_INF "lo"
-#define DRTT_RECEIVER_ADDR 2
+#define DRTT_RECEIVER_ADDR 3 

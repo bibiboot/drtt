@@ -37,12 +37,18 @@ struct custom_packet_header{
     addr_t dst_addr;                                                          
     addr_t src_addr;                                                          
     port_t dst_port;                                                          
-};                                                                              
+};
+struct timestamp{
+    uint32_t sec;
+    uint32_t fsec;
+};
 extern struct globals globals;
 
 #define CUSTOM_HEADER_SZ sizeof(struct custom_packet_header)                       
-#define TIMESTAMP_SZ sizeof(uint64_t)                                           
+#define TIMESTAMP_SZ sizeof(struct timestamp)                                           
 #define DRTT_SZ (CUSTOM_HEADER_SZ + TIMESTAMP_SZ)
 #define STRATUM0 1
 #define STRATUM1 2
 #define DRTT_REQ_PORT 1
+#define DRTT_RES_PORT 2
+#define BROADCAST_ADDR 0xffff

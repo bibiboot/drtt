@@ -1,7 +1,7 @@
 #include "my_socket.h"
 	
 int
-create_sending_socket()                                                       
+create_sending_socket(char* inf, struct sockaddr_ll* socket_address)                                                       
 {                                                                               
     int s;                                                                  
     s = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));                      
@@ -10,7 +10,8 @@ create_sending_socket()
         printf("ERROR: socket(). Exiting...\n");                        
         perror("SOCKET:");                                              
         exit(1);                                                        
-    }                                                                       
+    }   
+    set_socket_inf(s, inf, socket_address);                                                                    
     return s;                                                               
 } 
 
