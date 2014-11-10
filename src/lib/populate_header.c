@@ -1,8 +1,8 @@
 #include "populate_header.h"
 
 int
-populate_header(uint16_t next_hop_addr, uint16_t dst_addr, uint16_t src_addr,\
-             uint16_t dst_port, void **packet)
+populate_header(addr_t next_hop_addr, addr_t dst_addr, addr_t src_addr,\
+             port_t dst_port, void **packet)
 {
     struct custom_packet_header* hdr;
     hdr = (struct custom_packet_header*)*packet;

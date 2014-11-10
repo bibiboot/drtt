@@ -17,12 +17,14 @@ INCLUDES_SERVER=-I$(SRC_DIR) -I$(CURDIR) \
 	        -I$(SERVER_DIR) \
 	        -I$(LIB_DIR) \
 	        -lpthread \
+            -lpcap \
 
 INCLUDES_CLIENT=-I$(SRC_DIR) -I$(CURDIR) \
 	        -I$(CURDIR)/deps/uthash \
 	        -I$(CLIENT_DIR) \
 	        -I$(LIB_DIR) \
 	        -lpthread \
+            -lpcap \
 
 # All .c files in src folder
 _SOURCES=$(shell find $(SRC_DIR) -type f -iname '*.[c]')

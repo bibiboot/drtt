@@ -29,11 +29,14 @@ struct globals {
     struct config config;
     dict_node *hashl;
 };
+
+typedef uint16_t addr_t;
+typedef uint16_t port_t;
 struct custom_packet_header{                                                       
-    uint16_t next_hop_addr;                                                     
-    uint16_t dst_addr;                                                          
-    uint16_t src_addr;                                                          
-    uint16_t dst_port;                                                          
+    addr_t next_hop_addr;                                                     
+    addr_t dst_addr;                                                          
+    addr_t src_addr;                                                          
+    port_t dst_port;                                                          
 };                                                                              
 extern struct globals globals;
 
