@@ -9,5 +9,5 @@ struct config {
     uint16_t packet_len;
 };
 
-#define SENDER_INF "lo"
+#define SENDER_INF "eth0"
 #define DRTT_RECEIVER_ADDR 3 
