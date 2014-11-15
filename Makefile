@@ -40,7 +40,7 @@ create:
 # Build
 build_server:
 	    -mkdir -p $(BIN_DIR)
-	    $(CC) -o $(BIN_DIR)/server $(_SOURCES_LIB) $(_SOURCES_SERVER) $(INCLUDES_SERVER)
+	    $(CC) -o $(BIN_DIR)/server $(_SOURCES_LIB) $(_SOURCES_SERVER) $(INCLUDES_SERVER) -g
 
 build_client:
 	    -mkdir -p $(BIN_DIR)

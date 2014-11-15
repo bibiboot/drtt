@@ -9,7 +9,9 @@ start_receiver(void *argument)
     int payload_len = 1024; //[AB] put in config
     struct sockaddr_in* from_addr;
     int ret;
-    int s; 
+    int s;
+
+    payload = (char *)malloc(payload_len); 
     memset(payload, 0, payload_len);
    
     s = create_recv_socket_ts("eth0", 5555);
