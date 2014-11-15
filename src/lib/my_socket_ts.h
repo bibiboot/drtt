@@ -46,10 +46,9 @@ void setup_msghdr(struct msghdr* ,
                   struct iovec* , 
                   struct control* ,  
                   char *, 
-                  int , 
+                  int, 
                   struct sockaddr_in* );
-int recv_packet_ts(int, 
-                   struct msghdr* msg,
-                   int);
+int recv_packet_ts(int, struct msghdr* msg, int);
+void printpacket(struct msghdr *, int, char *, int, int);
 //void set_socket_inf(int, char*, struct sockaddr_ll*);
 //int inf_to_index(char*);

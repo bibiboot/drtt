@@ -29,6 +29,8 @@ start_receiver(void *argument)
             printf("Error receiving\n");
             exit(1);
         }
+        printpacket(&msg, ret, payload, s, 0);
+        
     }
     
 }
