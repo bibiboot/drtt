@@ -14,7 +14,7 @@ create_recv_rawsocket_ts(char* inf, int port_no)
     struct ifreq hwtstamp;                                                      
     struct hwtstamp_config hwconfig, hwconfig_requested;                        
     struct sockaddr_in addr; 
-    
+    struct sockaddr_ll socket_address;    
      
     //This should go in config
     so_timestamping_flags |= SOF_TIMESTAMPING_RX_SOFTWARE;                      
@@ -31,6 +31,17 @@ create_recv_rawsocket_ts(char* inf, int port_no)
     //set_socket_inf(s, inf, socket_address);
     setsockopt(s, SOL_SOCKET, SO_BINDTODEVICE, inf, strlen(inf));  
     
+    socket_address.sll_family   = AF_PACKET;
+    socket_address.sll_protocol = htons(ETH_P_ALL);
+    socket_address.sll_ifindex = inf_to_index_raw(inf);
+    if (bind(s,
+            (struct sockaddr *)&socket_address,
+            sizeof(struct sockaddr_ll)) < 0){
+        printf("bind: %s\n", strerror(errno));
+        exit(1);
+    }
+
+
     
     memset(&hwtstamp, 0, sizeof(hwtstamp));                                     
     strncpy(hwtstamp.ifr_name, inf, sizeof(hwtstamp.ifr_name));           
@@ -57,16 +68,7 @@ create_recv_rawsocket_ts(char* inf, int port_no)
            hwconfig_requested.tx_type, hwconfig.tx_type,                        
            hwconfig_requested.rx_filter, hwconfig.rx_filter);    
     
-    addr.sin_family = AF_INET;                                                  
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);                                   
-    addr.sin_port = htons(port_no);      
-    if (bind(s,                                                              
-         (struct sockaddr *)&addr,                                              
-         sizeof(struct sockaddr_in)) < 0){
-        printf("bind: %s\n", strerror(errno));                                 
-        exit(1);
-    } 
-    
+   
 
 
     if (so_timestamp &&                                                         
