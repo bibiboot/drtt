@@ -167,8 +167,6 @@ recv_packet_ts(int s, struct msghdr* msg, int recvmsg_flags)
 
 }
 
-
-
 void 
 printpacket(struct msghdr *msg, int res,
             char *data,	int sock, int recvmsg_flags)

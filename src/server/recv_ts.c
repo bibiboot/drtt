@@ -14,7 +14,8 @@ start_receiver(void *argument)
     payload = (char *)malloc(payload_len); 
     memset(payload, 0, payload_len);
    
-    s = create_recv_socket_ts("eth0", 5555);
+    //s = create_recv_socket_ts("eth0", 5555);
+    s = create_recv_rawsocket_ts("eth0", 5555);
     setup_msghdr(&msg, 
                  &entry, 
                  &control,  
