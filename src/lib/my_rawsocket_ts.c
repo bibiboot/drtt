@@ -141,13 +141,13 @@ setup_raw_msghdr(struct msghdr* msg, struct iovec* entry, struct control* contro
 }
 
 int 
-recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags)
+recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, int* port)
 {
     int i;
     int res;
     res = recvmsg(s, msg, 0);
     printf("In recvpacket after recvmsg\n");
-    if (res < 0) {
+    if (res < 0){
         printf("%s %s: %s\n",
                "recvmsg",
                (recvmsg_flags & MSG_ERRQUEUE) ? "error" : "regular",
@@ -156,6 +156,7 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags)
         //printpacket(&msg, res, payload,
         //        s, recvmsg_flags);
         if ((recvmsg_flags & MSG_ERRQUEUE) == 0){
+            *port = 0;
             /*printf("after:regular:data:\n");
             for (i = 0; i < 256; i++)
             {
@@ -164,6 +165,7 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags)
             printf("\n");*/
         }
         else{
+            *port = -1; 
             printf("Received error packet\n");
         }
     }
@@ -180,14 +182,17 @@ print_rawpacket(struct msghdr *msg, int res,
 	struct timespec ts;
 	struct timeval now;
 
-	gettimeofday(&now, 0);
+	//gettimeofday(&now, 0);
 
-	printf("%ld.%06ld: received %s data, %d bytes from %s, %zu bytes control messages\n",
+	/*printf("%ld.%06ld: received %s data, %d bytes from %s, %zu bytes control messages\n",
 	       (long)now.tv_sec, (long)now.tv_usec,
 	       (recvmsg_flags & MSG_ERRQUEUE) ? "error" : "regular",
 	       res,
 	       inet_ntoa(from_addr->sin_addr),
 	       msg->msg_controllen);
+    */
+    printf("received %s data, %d bytes\n",
+           (recvmsg_flags & MSG_ERRQUEUE) ? "error" : "regular");
 	if ((recvmsg_flags & MSG_ERRQUEUE) == 0){
 		printf("Data Data Data\n");
 		printf("Data:%u\n",*(uint8_t*)data);

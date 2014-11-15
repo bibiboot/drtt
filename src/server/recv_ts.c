@@ -1,4 +1,5 @@
 #include "recv_ts.h"
+#include "utils.h"
 void*
 start_receiver(void *argument)
 {
@@ -10,6 +11,7 @@ start_receiver(void *argument)
     struct sockaddr_in from_addr;
     int ret;
     int s;
+    int port;
 
     payload = (char *)malloc(payload_len); 
     memset(payload, 0, payload_len);
@@ -25,12 +27,16 @@ start_receiver(void *argument)
 
     while(1)
     {
-        ret = recv_rawpacket_ts(s, &msg, 0);
+        ret = recv_rawpacket_ts(s, &msg, 0, *port);
         if (ret < 0){
             printf("Error receiving\n");
             exit(1);
         }
-        print_rawpacket(&msg, ret, payload, s, 0);
+        if (port == 0){
+            //Regular packet
+             print_drtt_packet((void *)payload);
+        }
+        //print_rawpacket(&msg, ret, payload, s, 0);
         
     }
     
