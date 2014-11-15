@@ -12,6 +12,7 @@ start_receiver(void *argument)
     int ret;
     int s;
     int port;
+    struct timeval now;
 
     payload = (char *)malloc(payload_len); 
     memset(payload, 0, payload_len);
@@ -32,10 +33,14 @@ start_receiver(void *argument)
             printf("Error receiving\n");
             exit(1);
         }
+        gettimeofday(&now, 0);
+        printf("User space ts:%ld.%06ld: sent %d bytes\n",                                    
+               (long)now.tv_sec, (long)now.tv_usec, ret);
         if (port == 0){
             //Regular packet
              print_drtt_packet((void *)payload);
         }
+        print_kernel_ts(&msg);
         //print_rawpacket(&msg, ret, payload, s, 0);
         
     }

@@ -285,8 +285,57 @@ print_rawpacket(struct msghdr *msg, int res,
 		printf("\n");
 	}
 }
-
-
+void
+print_kernel_ts(struct msghdr *msg)
+{
+	struct cmsghdr *cmsg;
+    for (cmsg = CMSG_FIRSTHDR(msg);
+	     cmsg;
+	     cmsg = CMSG_NXTHDR(msg, cmsg)) {
+	printf("   cmsg len %zu: ", cmsg->cmsg_len);
+	    switch (cmsg->cmsg_level) {
+	    case SOL_SOCKET:
+	    	printf("SOL_SOCKET ");
+	    	switch (cmsg->cmsg_type) {
+	    	case SO_TIMESTAMP: {
+	    		struct timeval *stamp =
+	    			(struct timeval *)CMSG_DATA(cmsg);
+	    		printf("SO_TIMESTAMP %ld.%06ld\n",
+		    	       (long)stamp->tv_sec,
+		     	       (long)stamp->tv_usec);
+		    	break;
+		    }
+    		case SO_TIMESTAMPNS: {
+	    		struct timespec *stamp =
+		    		(struct timespec *)CMSG_DATA(cmsg);
+		    	printf("SO_TIMESTAMPNS %ld.%09ld\n",
+			           (long)stamp->tv_sec,
+			           (long)stamp->tv_nsec);
+			    break;
+    		}
+    		case SO_TIMESTAMPING: {
+	    		struct timespec *stamp =
+    			(struct timespec *)CMSG_DATA(cmsg);
+     			printf("SO_TIMESTAMPING ");
+		    	printf("SW %ld.%09ld \n",
+			           (long)stamp->tv_sec,
+			           (long)stamp->tv_nsec);
+			    stamp++;
+			    /* skip deprecated HW transformed */
+			    stamp++;
+			    printf("HW raw %ld.%09ld\n",
+			       (long)stamp->tv_sec,
+			       (long)stamp->tv_nsec);
+			    break;
+		    }
+		default:
+		    printf("type %d", cmsg->cmsg_type);
+			break;
+		}
+		break;
+	}
+    }
+}
 int
 inf_to_index_raw(char* inf)
 {
