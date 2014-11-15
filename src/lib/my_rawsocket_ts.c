@@ -1,7 +1,7 @@
 #include "my_rawsocket_ts.h"
 	
 int
-create_recv_rawsocket_ts(char* inf, int port_no)                                                       
+create_recv_rawsocket_ts(char* inf)                                                       
 {                                                                               
     int s;                 
     int so_timestamping_flags = 0; 
@@ -141,7 +141,7 @@ setup_raw_msghdr(struct msghdr* msg, struct iovec* entry, struct control* contro
 }
 
 int 
-recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, int* port)
+recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, int* err_packet)
 {
     int i;
     int res;
@@ -156,7 +156,7 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, int* port)
         //printpacket(&msg, res, payload,
         //        s, recvmsg_flags);
         if ((recvmsg_flags & MSG_ERRQUEUE) == 0){
-            *port = 0;
+            *err_packet = 0;
             /*printf("after:regular:data:\n");
             for (i = 0; i < 256; i++)
             {
@@ -165,7 +165,7 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, int* port)
             printf("\n");*/
         }
         else{
-            *port = -1; 
+            *err_packet = -1; 
             printf("Received error packet\n");
         }
     }

@@ -41,7 +41,7 @@ struct control{
     struct cmsghdr cm;                                                      
     char control[512];                                                      
 };            
-int create_recv_rawsocket_ts(char*, int port_no);
+int create_recv_rawsocket_ts(char*);
 void setup_raw_msghdr(struct msghdr* , 
                   struct iovec* , 
                   struct control* ,  
