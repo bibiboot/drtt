@@ -300,7 +300,7 @@ print_kernel_ts(struct msghdr *msg)
 	    	case SO_TIMESTAMP: {
 	    		struct timeval *stamp =
 	    			(struct timeval *)CMSG_DATA(cmsg);
-	    		printf("SO_TIMESTAMP %ld.%06ld\n",
+	    		printf("SO_TIMESTAMP %ld.%06ld",
 		    	       (long)stamp->tv_sec,
 		     	       (long)stamp->tv_usec);
 		    	break;
@@ -308,7 +308,7 @@ print_kernel_ts(struct msghdr *msg)
     		case SO_TIMESTAMPNS: {
 	    		struct timespec *stamp =
 		    		(struct timespec *)CMSG_DATA(cmsg);
-		    	printf("SO_TIMESTAMPNS %ld.%09ld\n",
+		    	printf("SO_TIMESTAMPNS %ld.%09ld",
 			           (long)stamp->tv_sec,
 			           (long)stamp->tv_nsec);
 			    break;
@@ -317,7 +317,7 @@ print_kernel_ts(struct msghdr *msg)
 	    		struct timespec *stamp =
     			(struct timespec *)CMSG_DATA(cmsg);
      			printf("SO_TIMESTAMPING ");
-		    	printf("SW %ld.%09ld \n",
+		    	printf("SW %ld.%09ld ",
 			           (long)stamp->tv_sec,
 			           (long)stamp->tv_nsec);
 			    stamp++;
@@ -335,6 +335,7 @@ print_kernel_ts(struct msghdr *msg)
 		break;
 	}
     }
+    printf("\n");
 }
 int
 inf_to_index_raw(char* inf)

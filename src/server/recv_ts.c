@@ -34,7 +34,7 @@ start_receiver(void *argument)
             exit(1);
         }
         gettimeofday(&now, 0);
-        printf("User space ts:%ld.%06ld: sent %d bytes\n",                                    
+        printf("User space ts:%ld.%06ld: received %d bytes\n",                                    
                (long)now.tv_sec, (long)now.tv_usec, ret);
         if (port == 0){
             //Regular packet
