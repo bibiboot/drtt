@@ -25,12 +25,12 @@ start_receiver(void *argument)
 
     while(1)
     {
-        ret = recv_packet_ts(s, &msg, 0);
+        ret = recv_rawpacket_ts(s, &msg, 0);
         if (ret < 0){
             printf("Error receiving\n");
             exit(1);
         }
-        printpacket(&msg, ret, payload, s, 0);
+        print_rawpacket(&msg, ret, payload, s, 0);
         
     }
     
