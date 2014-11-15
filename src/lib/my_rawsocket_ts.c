@@ -192,7 +192,7 @@ print_rawpacket(struct msghdr *msg, int res,
 	       msg->msg_controllen);
     */
     printf("received %s data, %d bytes\n",
-           (recvmsg_flags & MSG_ERRQUEUE) ? "error" : "regular");
+           (recvmsg_flags & MSG_ERRQUEUE) ? "error" : "regular", res);
 	if ((recvmsg_flags & MSG_ERRQUEUE) == 0){
 		printf("Data Data Data\n");
 		printf("Data:%u\n",*(uint8_t*)data);
