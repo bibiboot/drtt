@@ -51,4 +51,4 @@ void setup_raw_msghdr(struct msghdr* ,
 int recv_raw_packet_ts(int, struct msghdr* msg, int);
 void print_rawpacket(struct msghdr *, int, char *, int, int);
 //void set_socket_inf(int, char*, struct sockaddr_ll*);
-//int inf_to_index(char*);
+int inf_to_index_raw(char*);

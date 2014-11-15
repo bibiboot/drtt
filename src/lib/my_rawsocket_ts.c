@@ -282,14 +282,8 @@ print_rawpacket(struct msghdr *msg, int res,
 }
 
 
-
-
-
-/*
-
-
 int
-inf_to_index(char* inf)
+inf_to_index_raw(char* inf)
 {
 	int inf_indx;
 	if ((inf_indx = if_nametoindex (inf)) == 0){                   
@@ -299,4 +293,3 @@ inf_to_index(char* inf)
 	}
     return inf_indx;
 }
-*/ 
