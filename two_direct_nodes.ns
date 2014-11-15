@@ -1,0 +1,13 @@
+set ns [new Simulator] 
+source tb_compat.tcl 
+# Nodes 
+set s0 [$ns node] 
+set s1 [$ns node] 
+
+# Links 
+set link0 [$ns duplex-link $s0 $s1 1000000.0kb 0.0ms DropTail] 
+#tb-set-ip-link $s0 $s1 10.10.0.1 
+#tb-set-ip-link $s1 $s0 10.10.0.2 
+# Lans 
+$ns rtproto Static 
+$ns run 
