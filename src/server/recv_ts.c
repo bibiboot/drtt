@@ -53,20 +53,20 @@ start_receiver(void *argument)
 
             if (!IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
                 
-                printf("packet received: User space ts:%ld.%06ld:received %d bytes\n",                                    
+                printf("packet received: user space ts:%ld.%06ld:received %d bytes\n",                                    
                         (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
-                printf("packet received: Kernel space ts:%ld.%06ld:received %d bytes\n",                                    
+                printf("packet received: kernel space ts:%ld.%06ld:received %d bytes\n",                                    
                        (long)recv_kern.sec, (long)recv_kern.fsec, ret);
                 //print_drtt_packet((void*)payload);                                       
                                                                                 
                 if (IS_DRTT_REQUEST(hdr)) {                                             
                     printf("received drtt request\n");                                  
-                    create_drtt_response(hdr, arg->my_addr, ret, &recv_kern);
+                    create_drtt_response(hdr, arg->my_addr, CUSTOM_HEADER_SZ + TIMESTAMP_SZ, &recv_kern);
                     printf("processed response\n");                                     
                     //print_drtt_packet((void*)payload);  
                                                      
                     gettimeofday(&recv_usr, 0);
-                    printf("sending packet: User space ts:%ld.%06ld",
+                    printf("sending packet: user space ts:%ld.%06ld\n",
                             (long)recv_usr.tv_sec, 
                             (long)recv_usr.tv_usec);
                     /*send_packet(arg->send_sfd, &(arg->sk), 
