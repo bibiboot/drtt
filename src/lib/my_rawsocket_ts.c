@@ -149,10 +149,10 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags,
     res = recvmsg(s, msg, 0);
     //printf("In recvpacket after recvmsg\n");
     if (res < 0){
-        /*printf("%s %s: %s\n",
+        printf("%s %s: %s\n",
                "recvmsg",
                (recvmsg_flags & MSG_ERRQUEUE) ? "error" : "regular",
-               strerror(errno));*/
+               strerror(errno));
     } else {
         //printpacket(&msg, res, payload,
         //        s, recvmsg_flags);
@@ -167,11 +167,12 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags,
             printf("\n");*/
         }
         else{
-            *err_packet = -1; 
+            *err_packet = -1;
+            res = -1; 
             printf("Received error packet\n");
         }
     }
-
+    return res;
 }
 
 void 
