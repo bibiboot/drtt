@@ -13,10 +13,10 @@
  */
 void start(void *recv_arg)
 {
-    //pthread_create(&(globals.recv_th), 0, start_receiver, recv_arg);
+    pthread_create(&(globals.recv_th), 0, start_receiver, recv_arg);
     pthread_create(&(globals.ipc_th), 0, start_ipc_master, NULL);
 
-    //pthread_join(globals.recv_th, NULL);
+    pthread_join(globals.recv_th, NULL);
     pthread_join(globals.ipc_th, NULL);
 }
 
