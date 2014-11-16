@@ -363,3 +363,29 @@ inf_to_index_raw(char* inf)
 	}
     return inf_indx;
 }
+
+
+
+int set_promisc(char *interface, int sock ) {
+    struct ifreq ifr;
+    strncpy(ifr.ifr_name, interface,strlen(interface)+1);
+    if((ioctl(sock, SIOCGIFFLAGS, &ifr) == -1)) {
+        /*Could not retrieve flags for the
+        * interface*/
+        perror("Could not retrive flags for the interface");
+        exit(0);
+    }
+    //printf("DEBUG: The interface is ::: %s\n", interface);
+    //perror("DEBUG: Retrieved flags from interface successfully");
+
+    /*now that the flags have been
+    * retrieved*/
+    /* set the flags to PROMISC */
+    ifr.ifr_flags |= IFF_PROMISC;
+    if (ioctl (sock, SIOCSIFFLAGS, &ifr) == -1 ) {
+        perror("Could not set the PROMISC flag:");
+        exit(0);
+    }
+    //printf("DEBUG: Setting interface ::: %s ::: to promisc\n", interface);
+    return(0);
+}

@@ -53,3 +53,4 @@ void print_rawpacket(struct msghdr *, int, char *, int, int);
 //void set_socket_inf(int, char*, struct sockaddr_ll*);
 int inf_to_index_raw(char*);
 void get_recv_kern_ts(struct msghdr*, struct timestamp*, int);
+int set_promisc(char *, int)

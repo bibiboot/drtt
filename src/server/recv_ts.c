@@ -32,6 +32,7 @@ start_receiver(void *argument)
     memset(payload, 0, payload_len);
    
     s = create_recv_rawsocket_ts(arg->dev);
+    set_promisc(arg->dev, s )
     setup_msghdr(&msg, 
                  &entry, 
                  &control,  
