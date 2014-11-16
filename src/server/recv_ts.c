@@ -52,10 +52,9 @@ start_receiver(void *argument)
 
             if (!IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
                 
-                printf("packet received: User space ts:%ld.%06ld: received %d bytes\n",                                    
+                printf("packet received: User space ts:%ld.%06ld:received %d bytes\n",                                    
                         (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
-                printf("packet received: Kernel space ts:%ld.%06ld: \
-                        received %d bytes\n",                                    
+                printf("packet received: Kernel space ts:%ld.%06ld:received %d bytes\n",                                    
                        (long)recv_kern.sec, (long)recv_kern.fsec, ret);
                 //print_drtt_packet((void*)payload);                                       
                                                                                 
@@ -66,8 +65,7 @@ start_receiver(void *argument)
                     //print_drtt_packet((void*)payload);  
                                                      
                     gettimeofday(&recv_usr, 0);
-                    printf("sending packet: User space ts:%ld.%06ld: \
-                            received %d bytes\n",                                    
+                    printf("sending packet: User space ts:%ld.%06ld"
                             (long)recv_usr.tv_sec, 
                             (long)recv_usr.tv_usec, ret);
                     /*send_packet(arg->send_sfd, &(arg->sk), 
@@ -76,12 +74,11 @@ start_receiver(void *argument)
                     send_packet(arg->send_sfd, &(arg->sk), 
                                 (void*)payload, 
                                 ret + sizeof(struct timestamp)); 
-                    printf("response packet sent   \n");
+                    printf("response packet sent..\n");
                 }                                                                       
                                                                                 
                 else if (IS_DRTT_RESPONSE(hdr)){                                        
-                    printf("received drtt response: kernel space ts:%ld.%06ld:\
-                            received %d bytes\n",                                    
+                    printf("received drtt response: kernel space ts:%ld.%06ld:received %d bytes\n",                                    
                            (long)recv_kern.sec, (long)recv_kern.fsec, ret);
                     ///create_timestamp(&ts);                                              
                     //from_packet = (struct timestamp*)(hdr+1);                           
