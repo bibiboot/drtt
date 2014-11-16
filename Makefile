@@ -20,13 +20,6 @@ INCLUDES_SERVER=-I$(SRC_DIR) -I$(CURDIR) \
 	        -lpthread \
             -lpcap \
 
-INCLUDES_CLIENT=-I$(SRC_DIR) -I$(CURDIR) \
-	        -I$(CURDIR)/deps/uthash \
-	        -I$(CLIENT_DIR) \
-	        -I$(LIB_DIR) \
-	        -lpthread \
-            -lpcap \
-
 INCLUDES_SENDER=-I$(SRC_DIR) -I$(CURDIR) \
 	        -I$(CURDIR)/deps/uthash \
 	        -I$(SENDER_DIR) \
@@ -38,7 +31,6 @@ INCLUDES_SENDER=-I$(SRC_DIR) -I$(CURDIR) \
 # All .c files in src folder
 _SOURCES=$(shell find $(SRC_DIR) -type f -iname '*.[c]')
 _SOURCES_SERVER=$(shell find $(SERVER_DIR) -type f -iname '*.[c]')
-_SOURCES_CLIENT=$(shell find $(CLIENT_DIR) -type f -iname '*.[c]')
 _SOURCES_SENDER=$(shell find $(SENDER_DIR) -type f -iname '*.[c]')
 _SOURCES_LIB=$(shell find $(LIB_DIR) -type f -iname '*.[c]')
 
@@ -51,10 +43,6 @@ create:
 build_server:
 	    -mkdir -p $(BIN_DIR)
 	    $(CC) -o $(BIN_DIR)/server $(_SOURCES_LIB) $(_SOURCES_SERVER) $(INCLUDES_SERVER) -g
-
-build_client:
-	    -mkdir -p $(BIN_DIR)
-	    $(CC) -o $(BIN_DIR)/client $(_SOURCES_LIB) $(_SOURCES_CLIENT) $(INCLUDES_CLIENT)
 
 build_sender:
 	    -mkdir -p $(BIN_DIR)
