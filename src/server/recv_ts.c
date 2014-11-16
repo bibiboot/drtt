@@ -25,7 +25,9 @@ start_receiver(void *argument)
     
     arg = (struct receiver_arg*)argument;
 
-
+    arg->inf_index = inf_to_index(arg->dev); 
+    arg->send_sfd = create_sending_socket(arg->dev, &(arg->sk));
+    
     payload = (char *)malloc(payload_len); 
     memset(payload, 0, payload_len);
    
