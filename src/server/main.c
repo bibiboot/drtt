@@ -22,7 +22,7 @@ void start(void *recv_arg)
 
 int main(int argc, char *argv[])
 {
-    struct sniffer_arg arg;
+    struct receiver_arg arg;
 
     arg.dev = SENDER_INF;
     arg.my_addr = STRATUM1;
