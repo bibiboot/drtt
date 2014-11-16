@@ -74,7 +74,7 @@ start_receiver(void *argument)
                                 ret);    */
                     send_packet(arg->send_sfd, &(arg->sk), 
                                 (void*)payload, 
-                                ret + sizeof(struct timestamp)); 
+                                CUSTOM_HEADER_SZ + (2 * TIMESTAMP_SZ)); 
                     printf("response packet sent..\n");
                 }                                                                       
                                                                                 
