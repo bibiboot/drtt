@@ -147,12 +147,12 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags,
     int i;
     int res;
     res = recvmsg(s, msg, 0);
-    printf("In recvpacket after recvmsg\n");
+    //printf("In recvpacket after recvmsg\n");
     if (res < 0){
-        printf("%s %s: %s\n",
+        /*printf("%s %s: %s\n",
                "recvmsg",
                (recvmsg_flags & MSG_ERRQUEUE) ? "error" : "regular",
-               strerror(errno));
+               strerror(errno));*/
     } else {
         //printpacket(&msg, res, payload,
         //        s, recvmsg_flags);
@@ -298,7 +298,7 @@ get_recv_kern_ts(struct msghdr *msg, struct timestamp* recv_kern_ts, int res)
 	    printf("   cmsg len %zu: ", cmsg->cmsg_len);
 	    switch (cmsg->cmsg_level) {
 	    case SOL_SOCKET:
-	    	printf("SOL_SOCKET ");
+	    	//printf("SOL_SOCKET ");
 	    	switch (cmsg->cmsg_type) {
 	    	case SO_TIMESTAMP: {
 	    		struct timeval *stamp =

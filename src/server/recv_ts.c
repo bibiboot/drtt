@@ -47,16 +47,17 @@ start_receiver(void *argument)
             exit(1);
         }
         gettimeofday(&recv_usr, 0);
-        printf("packet received: User space ts:%ld.%06ld: received %d bytes\n",                                    
-               (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
         if (!err_packet) {
             hdr = (struct custom_packet_header*)payload;
 
             if (!IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
+                
+                printf("packet received: User space ts:%ld.%06ld: received %d bytes\n",                                    
+                        (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
                 printf("packet received: Kernel space ts:%ld.%06ld: \
                         received %d bytes\n",                                    
                        (long)recv_kern.sec, (long)recv_kern.fsec, ret);
-                print_drtt_packet((void*)payload);                                       
+                //print_drtt_packet((void*)payload);                                       
                                                                                 
                 if (IS_DRTT_REQUEST(hdr)) {                                             
                     printf("received drtt request\n");                                  
@@ -74,7 +75,8 @@ start_receiver(void *argument)
                                 ret);    */
                     send_packet(arg->send_sfd, &(arg->sk), 
                                 (void*)payload, 
-                                ret + sizeof(struct timestamp));    
+                                ret + sizeof(struct timestamp)); 
+                    printf("response packet sent   \n");
                 }                                                                       
                                                                                 
                 else if (IS_DRTT_RESPONSE(hdr)){                                        
@@ -89,6 +91,9 @@ start_receiver(void *argument)
 
             //Regular packet
             //print_drtt_packet((void *)payload);
+        }
+        else{
+            printf("encountered our packet\n");
         }
         //print_rawpacket(&msg, ret, payload, s, 0);
         
