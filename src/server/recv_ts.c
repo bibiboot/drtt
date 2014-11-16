@@ -1,8 +1,9 @@
 #include "recv_ts.h"
 #include "utils.h"
-#include "packet_filter.h"                                                      
-#include "create_drtt_response.h"                                               
-#include "my_socket.h" 
+#include "packet_filter.h"
+#include "create_drtt_response.h"
+#include "my_socket.h"
+
 void*
 start_receiver(void *argument)
 {
@@ -17,29 +18,29 @@ start_receiver(void *argument)
     int err_packet;
     struct timeval recv_usr;
 
-    struct custom_packet_header* hdr;                                           
-    struct timestamp recv_kern;                                                        
-    struct timestamp time_diff;                                                 
+    struct custom_packet_header* hdr;
+    struct timestamp recv_kern;
+    struct timestamp time_diff;
     struct timestamp *from_packet_kern;
-    struct receiver_arg* arg;                                                    
-    
+    struct receiver_arg* arg;
+
     arg = (struct receiver_arg*)argument;
 
-    arg->inf_index = inf_to_index(arg->dev); 
+    arg->inf_index = inf_to_index(arg->dev);
     arg->send_sfd = create_sending_socket(arg->dev, &(arg->sk));
-    
-    payload = (char *)malloc(payload_len); 
+
+    payload = (char *)malloc(payload_len);
     memset(payload, 0, payload_len);
-   
+
     s = create_recv_rawsocket_ts(arg->dev);
     set_promisc(arg->dev, s);
-    setup_msghdr(&msg, 
-                 &entry, 
-                 &control,  
-                 payload, 
-                 payload_len, 
+    setup_msghdr(&msg,
+                 &entry,
+                 &control,
+                 payload,
+                 payload_len,
                  &from_addr);
-    
+
     while(1)
     {
         ret = recv_rawpacket_ts(s, &msg, 0, &err_packet, &recv_kern);
@@ -47,45 +48,47 @@ start_receiver(void *argument)
             printf("Error receiving\n");
             exit(1);
         }
+
         gettimeofday(&recv_usr, 0);
+
         if (!err_packet) {
             hdr = (struct custom_packet_header*)payload;
 
             if (!IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
-                
-                printf("packet received: user space ts:%ld.%06ld:received %d bytes\n",                                    
+
+                printf("packet received: user space ts:%ld.%06ld:received %d bytes\n",
                         (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
-                printf("packet received: kernel space ts:%ld.%06ld:received %d bytes\n",                                    
+                printf("packet received: kernel space ts:%ld.%06ld:received %d bytes\n",
                        (long)recv_kern.sec, (long)recv_kern.fsec, ret);
-                //print_drtt_packet((void*)payload);                                       
-                                                                                
-                if (IS_DRTT_REQUEST(hdr)) {                                             
-                    printf("received drtt request\n");                                  
+                //print_drtt_packet((void*)payload);
+
+                if (IS_DRTT_REQUEST(hdr)) {
+                    printf("received drtt request\n");
                     create_drtt_response(hdr, arg->my_addr, CUSTOM_HEADER_SZ + TIMESTAMP_SZ, &recv_kern);
-                    printf("processed response\n");                                     
-                    //print_drtt_packet((void*)payload);  
-                                                     
+                    printf("processed response\n");
+                    //print_drtt_packet((void*)payload);
+
                     gettimeofday(&recv_usr, 0);
                     printf("sending packet: user space ts:%ld.%06ld\n",
-                            (long)recv_usr.tv_sec, 
+                            (long)recv_usr.tv_sec,
                             (long)recv_usr.tv_usec);
-                    /*send_packet(arg->send_sfd, &(arg->sk), 
-                                (void*)payload, 
+                    /*send_packet(arg->send_sfd, &(arg->sk),
+                                (void*)payload,
                                 ret);    */
-                    send_packet(arg->send_sfd, &(arg->sk), 
-                                (void*)payload, 
-                                CUSTOM_HEADER_SZ + (2 * TIMESTAMP_SZ)); 
+                    send_packet(arg->send_sfd, &(arg->sk),
+                                (void*)payload,
+                                CUSTOM_HEADER_SZ + (2 * TIMESTAMP_SZ));
                     printf("response packet sent..\n");
-                }                                                                       
-                                                                                
-                else if (IS_DRTT_RESPONSE(hdr)){                                        
-                    printf("received drtt response: kernel space ts:%ld.%06ld:received %d bytes\n",                                    
+                }
+
+                else if (IS_DRTT_RESPONSE(hdr)){
+                    printf("received drtt response: kernel space ts:%ld.%06ld:received %d bytes\n",
                            (long)recv_kern.sec, (long)recv_kern.fsec, ret);
-                    ///create_timestamp(&ts);                                              
-                    //from_packet = (struct timestamp*)(hdr+1);                           
-                    cal_time_diff(&time_diff, &recv_kern, payload);                        
-                }                                                                       
-            }                                           
+                    ///create_timestamp(&ts);
+                    //from_packet = (struct timestamp*)(hdr+1);
+                    cal_time_diff(&time_diff, &recv_kern, payload);
+                }
+            }
 
             //Regular packet
             //print_drtt_packet((void *)payload);
@@ -94,8 +97,7 @@ start_receiver(void *argument)
             printf("encountered our packet\n");
         }
         //print_rawpacket(&msg, ret, payload, s, 0);
-        
+
     }
-    
 }
 
