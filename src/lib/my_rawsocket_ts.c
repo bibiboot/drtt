@@ -290,12 +290,12 @@ print_rawpacket(struct msghdr *msg, int res,
 void
 get_recv_kern_ts(struct msghdr *msg, struct timestamp* recv_kern_ts, int res)
 {
-    printf("in recv_kern_ts()\n");
+    //printf("in recv_kern_ts()\n");
 	struct cmsghdr *cmsg;
     for (cmsg = CMSG_FIRSTHDR(msg);
 	     cmsg;
 	     cmsg = CMSG_NXTHDR(msg, cmsg)) {
-	    printf("   cmsg len %zu: ", cmsg->cmsg_len);
+	    //printf("   cmsg len %zu: ", cmsg->cmsg_len);
 	    switch (cmsg->cmsg_level) {
 	    case SOL_SOCKET:
 	    	//printf("SOL_SOCKET ");
