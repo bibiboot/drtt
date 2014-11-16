@@ -290,6 +290,7 @@ print_rawpacket(struct msghdr *msg, int res,
 void
 get_recv_kern_ts(struct msghdr *msg, struct timestamp* recv_kern_ts, int res)
 {
+    printf("in recv_kern_ts()\n");
 	struct cmsghdr *cmsg;
     for (cmsg = CMSG_FIRSTHDR(msg);
 	     cmsg;
@@ -304,9 +305,9 @@ get_recv_kern_ts(struct msghdr *msg, struct timestamp* recv_kern_ts, int res)
 	    			(struct timeval *)CMSG_DATA(cmsg);
                 recv_kern_ts->sec = (long)stamp->tv_sec;
                 recv_kern_ts->fsec = (long)stamp->tv_usec;
-	    		//printf("SO_TIMESTAMP %ld.%06ld",
-		    	//       (long)stamp->tv_sec,
-		     	//       (long)stamp->tv_usec);
+	    		/*printf("SO_TIMESTAMP %ld.%06ld",
+		    	       (long)stamp->tv_sec,
+		     	       (long)stamp->tv_usec);*/
 		    	break;
 		    }
     		case SO_TIMESTAMPNS: {
@@ -327,14 +328,15 @@ get_recv_kern_ts(struct msghdr *msg, struct timestamp* recv_kern_ts, int res)
 		    	printf("SW %ld.%09ld ",
 			           (long)stamp->tv_sec,
 			           (long)stamp->tv_nsec);*/
+                recv_kern_ts->sec = (long)stamp->tv_sec;
+                recv_kern_ts->fsec = (long)stamp->tv_nsec;
 			    stamp++;
 			    /* skip deprecated HW transformed */
 			    stamp++;
 			    /*printf("HW raw %ld.%09ld\n",
 			       (long)stamp->tv_sec,
-			       (long)stamp->tv_nsec);*/
-                recv_kern_ts->sec = (long)stamp->tv_sec;
-                recv_kern_ts->fsec = (long)stamp->tv_nsec;
+			       (long)stamp->tv_nsec);
+                */
 			    break;
 		    }
 		default:
