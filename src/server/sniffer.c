@@ -3,6 +3,7 @@
 #include "packet_filter.h"
 #include "create_drtt_response.h"
 #include "my_socket.h"
+/*
 void*
 start_sniffer(void *argument)
 {
@@ -55,4 +56,4 @@ void packet_received(u_char *argument, const struct pcap_pkthdr *header,
         }
     }
 
-}
+}*/

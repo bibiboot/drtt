@@ -19,7 +19,7 @@ start_receiver(void *argument)
 
     struct custom_packet_header* hdr;                                           
     struct timestamp recv_kern;                                                        
-    struct timestamp drtt_diff_kern;                                                 
+    struct timestamp time_diff;                                                 
     struct timestamp *from_packet_kern;
     struct receiver_arg* arg;                                                    
     
@@ -47,36 +47,43 @@ start_receiver(void *argument)
             exit(1);
         }
         gettimeofday(&recv_usr, 0);
-        printf("User space ts:%ld.%06ld: received %d bytes\n",                                    
+        printf("packet received: User space ts:%ld.%06ld: received %d bytes\n",                                    
                (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
         if (!err_packet) {
             hdr = (struct custom_packet_header*)payload;
 
             if (!IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
-                printf("Kernel space ts:%ld.%06ld: received %d bytes\n",                                    
+                printf("packet received: Kernel space ts:%ld.%06ld: \
+                        received %d bytes\n",                                    
                        (long)recv_kern.sec, (long)recv_kern.fsec, ret);
-                printf("Received packet\n");                                            
                 print_drtt_packet((void*)payload);                                       
                                                                                 
                 if (IS_DRTT_REQUEST(hdr)) {                                             
-                    printf("Received drtt request\n");                                  
-                    create_drtt_response(hdr, arg->my_addr);                            
-                    printf("Processed response\n");                                     
-                    print_drtt_packet((void*)payload);                                   
-                    send_packet(arg->send_sfd, &(arg->sk), (void*)payload, DRTT_SZ );    
+                    printf("received drtt request\n");                                  
+                    create_drtt_response(hdr, arg->my_addr, ret, &recv_kern);
+                    printf("processed response\n");                                     
+                    //print_drtt_packet((void*)payload);  
+                                                     
+                    gettimeofday(&recv_usr, 0);
+                    printf("sending packet: User space ts:%ld.%06ld: \
+                            received %d bytes\n",                                    
+                            (long)recv_usr.tv_sec, 
+                            (long)recv_usr.tv_usec, ret);
+                    /*send_packet(arg->send_sfd, &(arg->sk), 
+                                (void*)payload, 
+                                ret);    */
+                    send_packet(arg->send_sfd, &(arg->sk), 
+                                (void*)payload, 
+                                ret + sizeof(struct timestamp));    
                 }                                                                       
                                                                                 
                 else if (IS_DRTT_RESPONSE(hdr)){                                        
-                    /*create_timestamp(&ts);                                              
-                    from_packet = (struct timestamp*)(hdr+1);                           
-                    cal_time_diff(&time_diff, &ts, from_packet);                        
-                                                                                 
-                    printf("Time now\n");                                               
-                    print_timestamp(&ts);                                               
-                    printf("Time from packet\n");                                       
-                    print_timestamp(from_packet);                                       
-                    printf("Time diff\n");                                              
-                    print_timestamp(&time_diff);       */                                 
+                    printf("received drtt response: kernel space ts:%ld.%06ld:\
+                            received %d bytes\n",                                    
+                           (long)recv_kern.sec, (long)recv_kern.fsec, ret);
+                    ///create_timestamp(&ts);                                              
+                    //from_packet = (struct timestamp*)(hdr+1);                           
+                    cal_time_diff(&time_diff, &recv_kern, payload);                        
                 }                                                                       
             }                                           
 
