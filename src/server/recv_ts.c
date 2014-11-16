@@ -65,9 +65,9 @@ start_receiver(void *argument)
                     //print_drtt_packet((void*)payload);  
                                                      
                     gettimeofday(&recv_usr, 0);
-                    printf("sending packet: User space ts:%ld.%06ld"
+                    printf("sending packet: User space ts:%ld.%06ld",
                             (long)recv_usr.tv_sec, 
-                            (long)recv_usr.tv_usec, ret);
+                            (long)recv_usr.tv_usec);
                     /*send_packet(arg->send_sfd, &(arg->sk), 
                                 (void*)payload, 
                                 ret);    */
