@@ -141,7 +141,8 @@ setup_raw_msghdr(struct msghdr* msg, struct iovec* entry, struct control* contro
 }
 
 int 
-recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, int* err_packet)
+recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, 
+                  int* err_packet, struct timestamp* recv_kern_ts)
 {
     int i;
     int res;
@@ -157,6 +158,7 @@ recv_rawpacket_ts(int s, struct msghdr* msg, int recvmsg_flags, int* err_packet)
         //        s, recvmsg_flags);
         if ((recvmsg_flags & MSG_ERRQUEUE) == 0){
             *err_packet = 0;
+            get_recv_kern_ts(msg, recv_kern_ts, res); 
             /*printf("after:regular:data:\n");
             for (i = 0; i < 256; i++)
             {
@@ -286,13 +288,13 @@ print_rawpacket(struct msghdr *msg, int res,
 	}
 }
 void
-print_kernel_ts(struct msghdr *msg)
+get_recv_kern_ts(struct msghdr *msg, struct timestamp* recv_kern_ts, int res)
 {
 	struct cmsghdr *cmsg;
     for (cmsg = CMSG_FIRSTHDR(msg);
 	     cmsg;
 	     cmsg = CMSG_NXTHDR(msg, cmsg)) {
-	printf("   cmsg len %zu: ", cmsg->cmsg_len);
+	    printf("   cmsg len %zu: ", cmsg->cmsg_len);
 	    switch (cmsg->cmsg_level) {
 	    case SOL_SOCKET:
 	    	printf("SOL_SOCKET ");
@@ -300,36 +302,45 @@ print_kernel_ts(struct msghdr *msg)
 	    	case SO_TIMESTAMP: {
 	    		struct timeval *stamp =
 	    			(struct timeval *)CMSG_DATA(cmsg);
-	    		printf("SO_TIMESTAMP %ld.%06ld",
-		    	       (long)stamp->tv_sec,
-		     	       (long)stamp->tv_usec);
+                recv_kern_ts->sec = (long)stamp->tv_sec;
+                recv_kern_ts->fsec = (long)stamp->tv_usec;
+	    		//printf("SO_TIMESTAMP %ld.%06ld",
+		    	//       (long)stamp->tv_sec,
+		     	//       (long)stamp->tv_usec);
 		    	break;
 		    }
     		case SO_TIMESTAMPNS: {
 	    		struct timespec *stamp =
 		    		(struct timespec *)CMSG_DATA(cmsg);
-		    	printf("SO_TIMESTAMPNS %ld.%09ld",
+                recv_kern_ts->sec = (long)stamp->tv_sec;
+                recv_kern_ts->fsec = (long)stamp->tv_nsec;
+		    	/*printf("SO_TIMESTAMPNS %ld.%09ld",
 			           (long)stamp->tv_sec,
 			           (long)stamp->tv_nsec);
+                */
 			    break;
     		}
     		case SO_TIMESTAMPING: {
 	    		struct timespec *stamp =
     			(struct timespec *)CMSG_DATA(cmsg);
-     			printf("SO_TIMESTAMPING ");
+     			/*printf("SO_TIMESTAMPING ");
 		    	printf("SW %ld.%09ld ",
 			           (long)stamp->tv_sec,
-			           (long)stamp->tv_nsec);
+			           (long)stamp->tv_nsec);*/
 			    stamp++;
 			    /* skip deprecated HW transformed */
 			    stamp++;
-			    printf("HW raw %ld.%09ld\n",
+			    /*printf("HW raw %ld.%09ld\n",
 			       (long)stamp->tv_sec,
-			       (long)stamp->tv_nsec);
+			       (long)stamp->tv_nsec);*/
+                recv_kern_ts->sec = (long)stamp->tv_sec;
+                recv_kern_ts->fsec = (long)stamp->tv_nsec;
 			    break;
 		    }
 		default:
 		    printf("type %d", cmsg->cmsg_type);
+            printf("We never anticipate this data\n");
+            exit(1);
 			break;
 		}
 		break;
@@ -337,6 +348,8 @@ print_kernel_ts(struct msghdr *msg)
     }
     printf("\n");
 }
+
+
 int
 inf_to_index_raw(char* inf)
 {

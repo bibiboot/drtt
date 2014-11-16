@@ -15,12 +15,12 @@ start_receiver(void *argument)
     int ret;
     int s;
     int err_packet;
-    struct timeval now;
+    struct timeval recv_usr;
 
     struct custom_packet_header* hdr;                                           
-    struct timestamp ts;                                                        
-    struct timestamp time_diff;                                                 
-    struct timestamp *from_packet;
+    struct timestamp recv_kern;                                                        
+    struct timestamp drtt_diff_kern;                                                 
+    struct timestamp *from_packet_kern;
     struct receiver_arg* arg;                                                    
     
     arg = (struct receiver_arg*)argument;
@@ -39,18 +39,20 @@ start_receiver(void *argument)
     
     while(1)
     {
-        ret = recv_rawpacket_ts(s, &msg, 0, &err_packet);
+        ret = recv_rawpacket_ts(s, &msg, 0, &err_packet, &recv_kern);
         if (ret < 0){
             printf("Error receiving\n");
             exit(1);
         }
-        gettimeofday(&now, 0);
+        gettimeofday(&recv_usr, 0);
         printf("User space ts:%ld.%06ld: received %d bytes\n",                                    
-               (long)now.tv_sec, (long)now.tv_usec, ret);
+               (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
         if (!err_packet) {
             hdr = (struct custom_packet_header*)payload;
 
-            if (!IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){                                 
+            if (!IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
+                printf("Kernel space ts:%ld.%06ld: received %d bytes\n",                                    
+                       (long)recv_kern.sec, (long)recv_kern.fsec, ret);
                 printf("Received packet\n");                                            
                 print_drtt_packet((void*)payload);                                       
                                                                                 
@@ -63,7 +65,7 @@ start_receiver(void *argument)
                 }                                                                       
                                                                                 
                 else if (IS_DRTT_RESPONSE(hdr)){                                        
-                    create_timestamp(&ts);                                              
+                    /*create_timestamp(&ts);                                              
                     from_packet = (struct timestamp*)(hdr+1);                           
                     cal_time_diff(&time_diff, &ts, from_packet);                        
                                                                                  
@@ -72,14 +74,13 @@ start_receiver(void *argument)
                     printf("Time from packet\n");                                       
                     print_timestamp(from_packet);                                       
                     printf("Time diff\n");                                              
-                    print_timestamp(&time_diff);                                        
+                    print_timestamp(&time_diff);       */                                 
                 }                                                                       
             }                                           
 
             //Regular packet
             //print_drtt_packet((void *)payload);
         }
-        print_kernel_ts(&msg);
         //print_rawpacket(&msg, ret, payload, s, 0);
         
     }
