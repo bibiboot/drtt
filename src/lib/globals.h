@@ -24,6 +24,7 @@
 #define STRATUM1 2
 #define DRTT_REQ_PORT 1
 #define DRTT_RES_PORT 2
+#define CNTP_PORT 3
 #define BROADCAST_ADDR 0xffff
 
 //FILE *LOGFILE;
