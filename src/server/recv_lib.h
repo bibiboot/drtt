@@ -13,5 +13,5 @@ struct receiver_arg
     struct sockaddr_ll sk;                                                      
 };  
   
-void setup_receiver(struct receiver_arg*, int**, char*, int, struct msghdr*,
+void setup_receiver(struct receiver_arg*, int*, char**, int, struct msghdr*,
 					struct iovec*, struct control*, struct sockaddr_in*);

@@ -21,7 +21,7 @@ start_receiver(void *argument)
 
     arg = (struct receiver_arg*)argument;
 
-    setup_receiver(arg, &s, payload, payload_len, 
+    setup_receiver(arg, &s, &payload, payload_len, 
 				   &msg, &entry, &control, &from_addr);
     /*arg->inf_index = inf_to_index(arg->dev);
     arg->send_sfd = create_sending_socket(arg->dev, &(arg->sk));
