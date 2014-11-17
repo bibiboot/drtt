@@ -13,5 +13,7 @@
 #define IS_CNTP(pkt) \
     (pkt->dst_port == CNTP_PORT)
 
+#define IS_DST_MATCH(pkt, sa) (pkt->dst_addr == (sa))
+
 #define IS_SRC_ADDR_MATCH(pkt, sa) (pkt->src_addr == (sa))
 
