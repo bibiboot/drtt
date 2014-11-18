@@ -18,4 +18,4 @@ void setup_receiver(struct receiver_arg*, int*, char**, int, struct msghdr*,
 					struct iovec*, struct control*, struct sockaddr_in*);
 int get_cntp_hops(char *, int);
 int get_cpacket_payload_len(char *, int); 
-uint64_t cal_offset(char *pkt, int total_sz, struct timestamp* s1_rx_ts)
+//uint64_t cal_offset(char *pkt, int total_sz, struct timestamp* s1_rx_ts)
