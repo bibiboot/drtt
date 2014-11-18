@@ -21,8 +21,8 @@ start_receiver(void *argument)
 
     arg = (struct receiver_arg*)argument;
 
-    setup_receiver(arg, &s, &payload, payload_len, 
-				   &msg, &entry, &control, &from_addr);
+    setup_receiver(arg, &s, &payload, payload_len,
+		   &msg, &entry, &control, &from_addr);
     /*arg->inf_index = inf_to_index(arg->dev);
     arg->send_sfd = create_sending_socket(arg->dev, &(arg->sk));
 
@@ -48,7 +48,7 @@ start_receiver(void *argument)
 
         gettimeofday(&recv_usr, 0);
         hdr = (struct custom_packet_header*)payload;
-		
+
 		if(err_packet){
 			printf("Never anticipated an error packet. Exiting.\n");
 			exit(1);
@@ -56,7 +56,7 @@ start_receiver(void *argument)
 		if (IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
 			//printf("Own packet\n");
 			continue;
-		} 
+		}
 
 
         printf("packet received: user space ts:%ld.%06ld:received %d bytes\n",

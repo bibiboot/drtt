@@ -11,5 +11,5 @@ struct config {
     uint16_t ipc_sleep_time;
 };
 
-#define SENDER_INF "eth0"
+#define SENDER_INF "eth4"
 #define DRTT_RECEIVER_ADDR 3
