@@ -24,15 +24,11 @@ int main(int argc, char *argv[])
 {
     struct receiver_arg arg;
 
+    globals.src_node = atoi(argv[1]);
+    //globals.drtt = malloc(100);
+
     arg.dev = SENDER_INF;
-    arg.my_addr = STRATUM1;
     start((void*)&arg);
 
-     /*
-     * Deprecated
-     * Shifted to raw socket
-     */
-    //start_receiver((void*)&arg);
-    //start_sniffer((void*)&arg);
     return 0;
 }

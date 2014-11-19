@@ -1,4 +1,30 @@
 #include "recv_ts.h"
+
+void drtt_request_handler( struct receiver_arg *arg,
+                           struct timestamp recv_kern,
+                           unsigned char *payload )
+{
+    struct timeval recv_usr;
+    gettimeofday(&recv_usr, 0);
+
+    reverse_kernel_timestamp(payload, CH_LEN);
+
+    unsigned long local_xmit_time  = (unsigned long)EXTRACT_64BITS(payload + CH_LEN);
+    unsigned long user_recv_time   = (unsigned long)recv_usr.tv_sec * SECONDS + recv_usr.tv_usec * MICROSECONDS;
+    unsigned long kernel_recv_time = (unsigned long)recv_kern.sec * SECONDS + recv_kern.fsec * NANOSECONDS;
+
+    printf("[Kernel][ %lu ] : Local transmit timestamp\n", local_xmit_time);
+    printf("[Kernel][ %lu ] : Recieved DRTT request\n", kernel_recv_time);
+    printf("[User  ][ %lu ] : Sending DRTT response\n", user_recv_time);
+
+    struct custom_packet_header *hdr = (struct custom_packet_header*)payload;
+    create_drtt_response(hdr, globals.src_node, CH_LEN + TIMESTAMP_LEN, &recv_kern);
+
+    send_packet(arg->send_sfd, &(arg->sk), (void*)payload, CH_LEN + (2 * TIMESTAMP_LEN));
+
+    printf("DRTT Response send\n");
+}
+
 void*
 start_receiver(void *argument)
 {
@@ -6,88 +32,56 @@ start_receiver(void *argument)
     struct iovec entry;
     struct control control;
     char *payload;
-    int payload_len = 1024; //[AB] put in config
+    int recv_socket_fd;
     struct sockaddr_in from_addr;
-    int ret;
-    int s;
+    int payload_len = globals.config.recv_payload_len;
+    struct receiver_arg *arg = (struct receiver_arg*)argument;
+
+    setup_receiver(arg, &recv_socket_fd,
+                   &payload, payload_len,
+		   &msg, &entry,
+                   &control, &from_addr);
+
     int err_packet;
+    int num_bytes_read;
+    struct timestamp recv_kern;
+    struct timestamp roundtrip_delay;
+    struct custom_packet_header* hdr;
     struct timeval recv_usr;
 
-    struct custom_packet_header* hdr;
-    struct timestamp recv_kern;
-    struct timestamp time_diff;
-    struct timestamp *from_packet_kern;
-    struct receiver_arg* arg;
-
-    arg = (struct receiver_arg*)argument;
-
-    setup_receiver(arg, &s, &payload, payload_len,
-		   &msg, &entry, &control, &from_addr);
-    /*arg->inf_index = inf_to_index(arg->dev);
-    arg->send_sfd = create_sending_socket(arg->dev, &(arg->sk));
-
-    payload = (char *)malloc(payload_len);
-    memset(payload, 0, payload_len);
-
-    s = create_recv_rawsocket_ts(arg->dev);
-    set_promisc(arg->dev, s);
-    setup_raw_msghdr(&msg,
-                 &entry,
-                 &control,
-                 payload,
-                 payload_len,
-                 &from_addr);
-	*/
     while(1)
     {
-        ret = recv_rawpacket_ts(s, &msg, 0, &err_packet, &recv_kern);
-        if (ret < 0){
+        num_bytes_read = recv_rawpacket_ts(recv_socket_fd, &msg,
+                                           0, &err_packet, &recv_kern);
+        if (num_bytes_read < 0){
             printf("Error receiving\n");
             exit(1);
-        }
+        } else if(err_packet){
+	    printf("Error packet encountered. Exiting.\n");
+	    exit(1);
+	}
 
-        gettimeofday(&recv_usr, 0);
         hdr = (struct custom_packet_header*)payload;
+	if (IS_SRC_ADDR_MATCH(hdr, globals.src_node)){
 
-		if(err_packet){
-			printf("Never anticipated an error packet. Exiting.\n");
-			exit(1);
-		}
-		if (IS_SRC_ADDR_MATCH(hdr, arg->my_addr)){
-			//printf("Own packet\n");
-			continue;
-		}
+	    continue;
 
+	} else if (IS_DRTT_REQUEST(hdr)) {
 
-        printf("packet received: user space ts:%ld.%06ld:received %d bytes\n",
-               (long)recv_usr.tv_sec, (long)recv_usr.tv_usec, ret);
-        printf("packet received: kernel space ts:%ld.%06ld:received %d bytes\n",
-               (long)recv_kern.sec, (long)recv_kern.fsec, ret);
-        //print_drtt_packet((void*)payload);
+            drtt_request_handler(arg, recv_kern, payload);
 
-        if (IS_DRTT_REQUEST(hdr)) {
-            printf("received drtt request\n");
-            create_drtt_response(hdr, arg->my_addr, CUSTOM_HEADER_SZ + TIMESTAMP_SZ, &recv_kern);
-            printf("processed response\n");
-            //print_drtt_packet((void*)payload);
+        } else if (IS_DRTT_RESPONSE(hdr)) {
 
-            gettimeofday(&recv_usr, 0);
-            printf("sending packet: user space ts:%ld.%06ld\n",
-                   (long)recv_usr.tv_sec,
-                   (long)recv_usr.tv_usec);
-            send_packet(arg->send_sfd, &(arg->sk),
-                        (void*)payload,
-                        CUSTOM_HEADER_SZ + (2 * TIMESTAMP_SZ));
-            printf("response packet sent..\n");
-        }
+            unsigned long kernel_recv_time = (unsigned long)recv_kern.sec * SECONDS + recv_kern.fsec * NANOSECONDS;
 
-        else if (IS_DRTT_RESPONSE(hdr)){
- 		   	printf("received drtt response: kernel space ts:%ld.%06ld:received %d bytes\n",
-                    (long)recv_kern.sec, (long)recv_kern.fsec, ret);
-            ///create_timestamp(&ts);
-            //from_packet = (struct timestamp*)(hdr+1);
-            cal_time_diff(&time_diff, &recv_kern, payload);
+ 	    //printf("[Kernel][ %lu ] : Recieved DRTT response\n", kernel_recv_time);
+
+            cal_roundtrip_delay(&roundtrip_delay, &recv_kern, payload);
+
+        } else {
+
+           //printf("Unknown packet\n");
+
         }
     }
 }
-

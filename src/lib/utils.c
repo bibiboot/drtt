@@ -23,7 +23,7 @@ print_drtt_packet(void *packet)
 {
     printf(KGRN,"");
     print_header(packet);
-    print_ts(packet + CUSTOM_HEADER_SZ);
+    print_ts(packet + CH_LEN);
     printf(RESET);
 }
 
@@ -50,7 +50,7 @@ void
 print_drtt_packet_net(void *packet)
 {
     print_header_net(packet);
-    print_ts_net(packet + CUSTOM_HEADER_SZ);
+    print_ts_net(packet + CH_LEN);
 }
 
 void

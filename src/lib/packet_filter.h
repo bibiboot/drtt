@@ -2,7 +2,7 @@
 
 #define IS_BROADCAST(pkt) \
     ((pkt->dst_addr == BROADCAST_ADDR) && \
-    (pkt->next_hop_addr == BROADCAST_ADDR)) 
+    (pkt->next_hop_addr == BROADCAST_ADDR))
 
 #define IS_DRTT_REQUEST(pkt) \
     ((pkt->dst_port == DRTT_REQ_PORT) && IS_BROADCAST(pkt) )
