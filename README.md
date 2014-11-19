@@ -17,7 +17,7 @@ Execution
 - Sender on node 1
   - sudo ./bin/sender 1
 - Server on node 1
-  - sudo ./bin/server 2
+  - sudo ./bin/server 1
 
 Most important Coding guidlines
 -------------------------------
