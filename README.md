@@ -12,6 +12,13 @@ Undertanding directories
 - bin      : Contains the runnable files created after build command.
 - test     : Contains the sub-directories of the test files written.
 
+Execution
+---------
+- Sender on node 1
+  - sudo ./bin/sender 1
+- Server on node 1
+  - sudo ./bin/server 2
+
 Most important Coding guidlines
 -------------------------------
 - Follow 4 space indentation.
