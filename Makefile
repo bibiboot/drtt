@@ -18,14 +18,14 @@ INCLUDES_SERVER=-I$(SRC_DIR) -I$(CURDIR) \
 	        -I$(SERVER_DIR) \
 	        -I$(LIB_DIR) \
 	        -lpthread \
-            -lpcap \
+                -lpcap \
 
 INCLUDES_SENDER=-I$(SRC_DIR) -I$(CURDIR) \
 	        -I$(CURDIR)/deps/uthash \
 	        -I$(SENDER_DIR) \
 	        -I$(LIB_DIR) \
 	        -lpthread \
-            -lpcap \
+                -lpcap \
 
 
 # All .c files in src folder
