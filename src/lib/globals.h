@@ -37,8 +37,6 @@
 //#define BROADCAST_ADDR 0xffff
 #define BROADCAST_ADDR 0x0FF00      /* Filter at kernel for 0x00FF */
 
-#define SENDER_INF "eth4"
-
 #define SECONDS      1000000000
 #define MILLISECONDS 1000000
 #define MICROSECONDS 1000
@@ -92,6 +90,8 @@ struct globals {
     uint16_t src_node;      /* custom IP of the node running drtt */
     pthread_t recv_th;
     pthread_t ipc_th;
+    char *recv_inf;
+    char *sender_inf;
     struct config config;
 };
 

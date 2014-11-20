@@ -13,11 +13,10 @@ send_drtt_req()
     memset(pkt, 0, CH_LEN);
 
     struct sockaddr_ll sk;
-    int send_sock_fd = create_sending_socket(SENDER_INF, &sk);
-    //set_socket_inf(s, SENDER_INF, &sk); //[AB]move "lo" to config
+    int send_sock_fd = create_sending_socket(globals.sender_inf, &sk);
 
-    populate_header(BROADCAST_ADDR, BROADCAST_ADDR, globals.src_node, DRTT_REQ_PORT, &pkt);
-    //create_timestamp((struct timestamp*)(pkt + CUSTOM_HEADER_SZ));
+    populate_header(BROADCAST_ADDR, BROADCAST_ADDR,
+                    globals.src_node, DRTT_REQ_PORT, &pkt);
 
     send_packet(send_sock_fd, &sk, (void *)pkt, CH_LEN);
 

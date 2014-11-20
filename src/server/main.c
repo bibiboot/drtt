@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
     struct receiver_arg arg;
 
     globals.src_node = atoi(argv[1]);
-    //globals.drtt = malloc(100);
+    globals.recv_inf = argv[2];
 
-    arg.dev = SENDER_INF;
+    arg.dev = globals.recv_inf;
     start((void*)&arg);
 
     return 0;
