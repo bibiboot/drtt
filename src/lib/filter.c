@@ -32,6 +32,7 @@ bool is_drtt_reply(unsigned char *packet)
     if (hdr->next_hop_addr == globals.src_node &&
         hdr->src_addr != globals.src_node &&
         hdr->dst_port == DRTT_RES_PORT) {
+
         return true;
     }
 
