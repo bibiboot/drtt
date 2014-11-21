@@ -1,10 +1,11 @@
 #include "globals.h"
 #include "my_rawsocket_ts.h"
 #include "utils.h"
-#include "packet_filter.h"
+#include "filter.h"
 #include "create_drtt_response.h"
 #include "my_socket.h"
 #include "create_timestamp.h"
+
 struct receiver_arg
 {
     char* dev;             /* device name */
@@ -14,7 +15,7 @@ struct receiver_arg
     struct sockaddr_ll sk;
 };
 
-void setup_receiver(struct receiver_arg*, int*, char**, int, struct msghdr*,
+void setup_receiver(struct receiver_arg*, int*, unsigned char**, int, struct msghdr*,
 					struct iovec*, struct control*, struct sockaddr_in*);
 int get_cntp_hops(char *, int);
 int get_cpacket_payload_len(char *, int);

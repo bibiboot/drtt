@@ -5,7 +5,8 @@
     (pkt->next_hop_addr == BROADCAST_ADDR))
 
 #define IS_DRTT_REQUEST(pkt) \
-    ((pkt->dst_port == DRTT_REQ_PORT) && IS_BROADCAST(pkt) )
+    ((pkt->dst_port == DRTT_REQ_PORT) && IS_BROADCAST(pkt) && \
+     !IS_SRC_ADDR_MATCH(pkt, globals.src_node))
 
 #define IS_DRTT_RESPONSE(pkt) \
     (pkt->dst_port == DRTT_RES_PORT)

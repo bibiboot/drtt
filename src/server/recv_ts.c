@@ -31,14 +31,14 @@ start_receiver(void *argument)
     struct msghdr msg;
     struct iovec entry;
     struct control control;
-    char *payload;
+    unsigned char *packet;
     int recv_socket_fd;
     struct sockaddr_in from_addr;
     int payload_len = globals.config.recv_payload_len;
     struct receiver_arg *arg = (struct receiver_arg*)argument;
 
     setup_receiver(arg, &recv_socket_fd,
-                   &payload, payload_len,
+                   &packet, payload_len,
 		   &msg, &entry,
                    &control, &from_addr);
 
@@ -46,7 +46,6 @@ start_receiver(void *argument)
     int num_bytes_read;
     struct timestamp recv_kern;
     struct timestamp roundtrip_delay;
-    struct custom_packet_header* hdr;
     struct timeval recv_usr;
 
     while(1)
@@ -61,22 +60,17 @@ start_receiver(void *argument)
 	    exit(1);
 	}
 
-        hdr = (struct custom_packet_header*)payload;
-	if (IS_SRC_ADDR_MATCH(hdr, globals.src_node)){
+	if (is_drtt_request(packet)) {
 
-	    continue;
+            drtt_request_handler(arg, recv_kern, packet);
 
-	} else if (IS_DRTT_REQUEST(hdr)) {
-
-            drtt_request_handler(arg, recv_kern, payload);
-
-        } else if (IS_DRTT_RESPONSE(hdr)) {
+        } else if (is_drtt_reply(packet)) {
 
             unsigned long kernel_recv_time = (unsigned long)recv_kern.sec * SECONDS + recv_kern.fsec * NANOSECONDS;
 
  	    //printf("[Kernel][ %lu ] : Recieved DRTT response\n", kernel_recv_time);
 
-            cal_roundtrip_delay(&roundtrip_delay, &recv_kern, payload);
+            cal_roundtrip_delay(&roundtrip_delay, &recv_kern, packet);
 
         } else {
 

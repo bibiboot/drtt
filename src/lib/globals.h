@@ -36,6 +36,7 @@
 
 //#define BROADCAST_ADDR 0xffff
 #define BROADCAST_ADDR 0x0FF00      /* Filter at kernel for 0x00FF */
+#define IDENTIFIER     0x0FF00
 
 #define SECONDS      1000000000
 #define MILLISECONDS 1000000
@@ -69,11 +70,12 @@ typedef struct hashl {
  * Custom protocol
  */
 struct custom_packet_header{
+    addr_t identifier;     /* Custom protocol identifier */
     addr_t next_hop_addr;
     addr_t dst_addr;
     addr_t src_addr;
     port_t dst_port;
-    char padding[60];
+    char padding[58];
 };
 
 /*

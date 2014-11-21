@@ -7,6 +7,7 @@ populate_header(addr_t next_hop_addr, addr_t dst_addr,
 {
     struct custom_packet_header *hdr = (struct custom_packet_header*)*packet;
 
+    hdr->identifier = IDENTIFIER;
     hdr->next_hop_addr = next_hop_addr;
     hdr->dst_addr = dst_addr;
     hdr->src_addr = src_addr;

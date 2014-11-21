@@ -1,7 +1,7 @@
 #include "recv_lib.h"
 
 void
-setup_receiver(struct receiver_arg* arg, int* s, char** payload,
+setup_receiver(struct receiver_arg* arg, int* s, unsigned char** payload,
 	       int payload_len, struct msghdr* msg, struct iovec* entry,
 	       struct control* control, struct sockaddr_in* from_addr)
 {

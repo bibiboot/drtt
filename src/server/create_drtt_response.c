@@ -19,10 +19,9 @@ create_drtt_response(struct custom_packet_header* hdr,
                      int size,
                      struct timestamp *recv_kern )
 {
+    hdr->identifier = IDENTIFIER;
     hdr->dst_addr = hdr->src_addr;
-    hdr->next_hop_addr = BROADCAST_ADDR;
-    //hdr->next_hop_addr = hdr->src_addr;
-    //hdr->src_addr = my_addr;
+    hdr->next_hop_addr = hdr->src_addr;
     hdr->src_addr = globals.src_node;
     hdr->dst_port = DRTT_RES_PORT;
 

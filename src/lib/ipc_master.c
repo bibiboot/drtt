@@ -51,6 +51,6 @@ void *start_ipc_master()
     while (1){
         printf("Writing drrt : %s\n", globals.drtt);
         sleep(globals.config.ipc_sleep_time);
+        fflush(stdout);
     }
-
 }
