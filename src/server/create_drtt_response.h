@@ -1,4 +1,3 @@
 #include "globals.h"
 
-void create_drtt_response(struct custom_packet_header*, 
-                          addr_t, int, struct timestamp*);
+void create_drtt_response(struct custom_packet_header*);
