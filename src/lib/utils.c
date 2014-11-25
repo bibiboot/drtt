@@ -21,7 +21,6 @@ print_ts(uint32_t *ts)
 void
 print_drtt_packet(void *packet)
 {
-    printf(KGRN,"");
     print_header(packet);
     print_ts(packet + CH_LEN);
     printf(RESET);
