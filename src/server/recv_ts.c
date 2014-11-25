@@ -70,7 +70,6 @@ start_receiver(void *argument)
             unsigned long kernel_recv_time = (unsigned long)recv_kern.sec * SECONDS + recv_kern.fsec * NANOSECONDS;
 
  	    //printf("[Kernel][ %lu ] : Recieved DRTT response\n", kernel_recv_time);
-            printf("Num bytes read : %d\n", num_bytes_read);
 
             cal_roundtrip_delay(&roundtrip_delay, &recv_kern, packet + CH_LEN);
 

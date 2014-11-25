@@ -58,20 +58,6 @@ cal_roundtrip_delay(struct timestamp* roundtrip_delay,
                     struct timestamp* local_rx,
                     unsigned char *payload)
 {
-    /*
-    struct timestamp *local_tx, *remote_rx, *remote_tx;
-    local_tx = (struct timestamp *)(payload + CH_LEN);
-    remote_rx = local_tx + 1;
-    remote_tx = local_tx + 2;
-    printf("\n");
-    */
-
-    /*
-     * Local tx and Remote tx are kernel time
-     * Must be printed in kernel way
-     * Remote tx must be reversed before reading.
-     */
-    /* Reverse Remote transmission timestamp */
     reverse_kernel_timestamp(payload, 2*TIMESTAMP_LEN);
     reverse_kernel_timestamp(payload, 3*TIMESTAMP_LEN);
 
@@ -88,9 +74,16 @@ cal_roundtrip_delay(struct timestamp* roundtrip_delay,
     printf("Local receieve timestamp   : %lu\n", local_recv_time);
     printf("User Local receieve time   : %lu\n", user_recv_time);
 
+    write_log("Local transmit timestamp ", local_xmit_time);
+    write_log("Remote receieve timestamp", remote_recv_time);
+    write_log("Remote transmit timestamp", remote_xmit_time);
+    write_log("Local receieve timestamp ", local_recv_time);
+    write_log("User Local receieve time ", user_recv_time);
+
     unsigned long processing_time = remote_xmit_time - remote_recv_time;
     unsigned long observed_delay  = local_recv_time - local_xmit_time;
 
     printf("Effective round trip delay : %lu\n", observed_delay - processing_time);
+    write_log("Round trip delay         ", observed_delay - processing_time);
     sprintf(globals.drtt, "%lu", observed_delay - processing_time);
 }

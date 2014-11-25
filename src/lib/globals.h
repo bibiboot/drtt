@@ -16,6 +16,7 @@
 #include "color.h"
 #include "cprotocol.h"
 #include "uthash.h"
+#include "logger.h"
 
 /*
  * Port nomenclature

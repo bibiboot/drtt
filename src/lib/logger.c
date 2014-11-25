@@ -1,76 +1,29 @@
-//logger.c
 #include <stdio.h>
-#include <stdarg.h>
 #include <time.h>
-#include <string.h>
-#include <stdlib.h>
 
-FILE *fp ;
-static int SESSION_TRACKER; //Keeps track of session
+#include "globals.h"
 
-char* print_time()
-{
-    time_t t;
-    char *buf;
+void write_log( char* msg, unsigned long value ) {
 
-    time(&t);
-    buf = malloc(strlen(ctime(&t))+ 1);
+    FILE *fp;
+    //char logfile[] = "Logfile.log";
+    char logfile[100];
+    sprintf(logfile, "drtt_log_%d.log", globals.src_node);
+    time_t logtime;
+    struct tm *logtm;
 
-    snprintf(buf,strlen(ctime(&t)),"%s ", ctime(&t));
+    logtime = time( NULL );
+    logtm = localtime( &logtime );
 
-    return buf;
-}
-void log_print(char* filename, int line, char *fmt,...)
-{
-    va_list         list;
-    char            *p, *r;
-    int             e;
+    fp = fopen( logfile, "a" );
 
-    if(SESSION_TRACKER > 0)
-      fp = fopen ("log.txt","a+");
-    else
-      fp = fopen ("log.txt","w");
+    if ( fp ) {
+        fprintf(fp,"%04d-%02d-%02d %02d:%02d:%02d - %s : %lu \n", 1900 + logtm->tm_year, logtm->tm_mon + 1,
+                logtm->tm_mday, logtm->tm_hour, logtm->tm_min, logtm->tm_sec ,
+                msg, value );
+        fclose(fp);
 
-    fprintf(fp,"%s ",print_time());
-    va_start( list, fmt );
-
-    for ( p = fmt ; *p ; ++p )
-    {
-        if ( *p != '%' )//If simple string
-        {
-            fputc( *p,fp );
-        }
-        else
-        {
-            switch ( *++p )
-            {
-                /* string */
-            case 's':
-            {
-                r = va_arg( list, char * );
-
-                fprintf(fp,": %s", r);
-                continue;
-            }
-
-            /* integer */
-            case 'd':
-            {
-                e = va_arg( list, int );
-
-                fprintf(fp,"%d", e);
-                continue;
-            }
-
-            default:
-                fputc( *p, fp );
-            }
-        }
+    } else {
+        printf( "Error opening logfile %s\n", logfile );
     }
-    va_end( list );
-    //fprintf(fp," [%s][line: %d] ",filename,line);
-    //fprintf(fp," [%s][line: %d] ",filename,line);
-    fputc( '\n', fp );
-    SESSION_TRACKER++;
-    fclose(fp);
 }
