@@ -74,16 +74,21 @@ cal_roundtrip_delay(struct timestamp* roundtrip_delay,
     printf("Local receieve timestamp   : %lu\n", local_recv_time);
     printf("User Local receieve time   : %lu\n", user_recv_time);
 
+    /*
     write_log("Local transmit timestamp ", local_xmit_time);
     write_log("Remote receieve timestamp", remote_recv_time);
     write_log("Remote transmit timestamp", remote_xmit_time);
     write_log("Local receieve timestamp ", local_recv_time);
     write_log("User Local receieve time ", user_recv_time);
+    */
 
     unsigned long processing_time = remote_xmit_time - remote_recv_time;
     unsigned long observed_delay  = local_recv_time - local_xmit_time;
 
     printf("Effective round trip delay : %lu\n", observed_delay - processing_time);
+    write_log("Total time               ", observed_delay);
+    write_log("Processing time          ",  processing_time);
     write_log("Round trip delay         ", observed_delay - processing_time);
+    write_log("++++++++++++++++++++++++++++++++++++",  0);
     sprintf(globals.drtt, "%lu", observed_delay - processing_time);
 }

@@ -2,7 +2,7 @@
 
 #define CONFIG_INIT { \
     .packet_len = 65535 , \
-    .ipc_sleep_time = 60*1, \
+    .ipc_sleep_time = 2*1, \
     .recv_payload_len = 1024, \
     .rtt = 2 ,}
 
